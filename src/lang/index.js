@@ -1,24 +1,23 @@
 import Vue from 'vue'
-import VueI18n from 'vue-i18n'
-import cn from './cn'
+import VueI18N from 'vue-i18n'
 import en from './en'
+import cn from './cn'
 import { getLocale, saveLocale } from '../utils/localStorage'
-// 通过插件的形式挂载
-Vue.use(VueI18n)
+
+Vue.use(VueI18N)
 
 const messages = {
-  // 语言包对应的文本
-  cn,
-  en
+  en,
+  cn
 }
-// 当前语言包的标识 en标识当前语言是英文
+
 let locale = getLocale()
 if (!locale) {
   locale = 'cn'
   saveLocale(locale)
 }
 
-const i18n = new VueI18n({
+const i18n = new VueI18N({
   locale,
   messages
 })

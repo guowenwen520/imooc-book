@@ -60,7 +60,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 150;
+  z-index: 1561;
   width: 100%;
   height: 100%;
   .content {

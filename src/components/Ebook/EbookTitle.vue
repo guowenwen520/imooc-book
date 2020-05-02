@@ -6,7 +6,7 @@
       </div>
       <div class="right">
         <div class="icon-wrapper">
-          <span class="icon-shelf"></span>
+          <span class="icon-shelf" @click="showBookShelf"></span>
         </div>
         <div class="icon-wrapper">
           <span class="icon-cart"></span>
@@ -23,7 +23,10 @@ import { ebookMixin } from '../../utils/mixin'
 export default {
   methods: {
     back() {
-      console.log('back')
+      this.$router.go(-1)
+    },
+    showBookShelf() {
+      this.$router.push('/store/shelf')
     }
   },
   mixins: [ebookMixin]
@@ -36,7 +39,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 101;
+  z-index: 150;
   width: 100%;
   height: px2rem(48);
   background-color: white;

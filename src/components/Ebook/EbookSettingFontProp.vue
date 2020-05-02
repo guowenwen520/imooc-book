@@ -1,5 +1,5 @@
 <template>
-  <transition name="popub-slide-up">
+  <transition name="popup-slide-up">
     <div class="ebook-popup-list" v-show="fontFamilyVisible">
       <div class="ebook-popup-title">
         <div class="ebook-popup-title-icon" @click="hideFontFamilySetting">

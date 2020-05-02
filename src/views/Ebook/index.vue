@@ -1,5 +1,7 @@
 <template>
   <div class="ebook" ref="ebook">
+    <!--电子书页眉组件-->
+    <ebook-header></ebook-header>
     <!--电子书标题组件-->
     <ebook-title></ebook-title>
     <!--电子书阅读部分组件-->
@@ -8,6 +10,8 @@
     <ebook-menu></ebook-menu>
     <!--书签组件-->
     <ebook-mark></ebook-mark>
+    <!--电子书页脚组件-->
+    <ebook-footer></ebook-footer>
   </div>
 </template>
 <script>
@@ -15,6 +19,8 @@ import EbookReader from '../../components/Ebook/EbookReader'
 import EbookTitle from '../../components/Ebook/EbookTitle'
 import EbookMenu from '../../components/Ebook/EbookMenu'
 import EbookMark from '../../components/Ebook/EbookBookMark'
+import EbookHeader from '../../components/Ebook/EbookHeader'
+import EbookFooter from '../../components/Ebook/EbookFooter'
 import { getReadTime, saveReadTime } from '../../utils/localStorage'
 import { ebookMixin } from '../../utils/mixin'
 export default {
@@ -23,7 +29,9 @@ export default {
     EbookReader,
     EbookTitle,
     EbookMenu,
-    EbookMark
+    EbookMark,
+    EbookHeader,
+    EbookFooter
   },
   watch: {
     // 监听用户滑动屏幕距离顶部的Y偏移量

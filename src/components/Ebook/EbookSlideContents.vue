@@ -19,9 +19,7 @@
         class="slide-contents-search-cancel"
         v-if="searchVisible"
         @click="hideSearchPage()"
-      >
-        {{ $t('book.cancel') }}
-      </div>
+      >{{ $t('book.cancel') }}</div>
     </div>
     <!--book信息区域-->
     <div class="slide-contents-book-wrapper" v-show="!searchVisible">
@@ -30,14 +28,18 @@
       </div>
       <div class="slide-contents-book-info-wrapper">
         <div class="slide-contents-book-title">
-          <span class="slide-contents-book-title-text">{{
+          <span class="slide-contents-book-title-text">
+            {{
             metadata.title
-          }}</span>
+            }}
+          </span>
         </div>
         <div class="slide-contents-book-author">
-          <span class="slide-contents-book-author-text">{{
+          <span class="slide-contents-book-author-text">
+            {{
             metadata.creator
-          }}</span>
+            }}
+          </span>
         </div>
       </div>
       <div class="slide-contents-book-progress-wrapper">
@@ -49,34 +51,19 @@
       </div>
     </div>
     <!--目录滚动条区域-->
-    <scroll
-      class="slide-contents-list"
-      :top="156"
-      :bottom="48"
-      v-show="!searchVisible"
-    >
-      <div
-        class="slide-contents-item"
-        v-for="(item, index) in navigation"
-        :key="index"
-      >
+    <scroll class="slide-contents-list" :top="156" :bottom="48" v-show="!searchVisible">
+      <div class="slide-contents-item" v-for="(item, index) in navigation" :key="index">
         <span
           class="slide-contents-item-label"
           :style="contentItemStyle(item)"
           :class="{ selected: section === index }"
           @click="displayContent(item.href)"
-          >{{ item.label }}</span
-        >
-        <span class="slide-contents-item-page">{{ item.page }}</span>
+        >{{ item.label }}</span>
+        <span class="slide-contents-item-page"></span>
       </div>
     </scroll>
     <!--搜索结果区域-->
-    <scroll
-      class="slide-search-list"
-      :top="66"
-      :bottom="48"
-      v-show="searchVisible"
-    >
+    <scroll class="slide-search-list" :top="66" :bottom="48" v-show="searchVisible">
       <div
         class="slide-search-item"
         v-for="(item, index) in searchList"
@@ -126,6 +113,7 @@ export default {
         }
       })
     },
+    // 根据关键字进行全文搜索
     doSearch(q) {
       return Promise.all(
         this.currentBook.spine.spineItems.map(section =>
@@ -134,6 +122,7 @@ export default {
             .then(section.find.bind(section, q))
             .finally(section.unload.bind(section))
         )
+        // 数组扁平化
       ).then(results => Promise.resolve([].concat.apply([], results)))
     },
     search() {
@@ -141,6 +130,7 @@ export default {
         this.doSearch(this.searchText).then(list => {
           this.searchList = list
           this.searchList.map(item => {
+            // 文字高亮显示
             item.excerpt = item.excerpt.replace(
               this.searchText,
               `<span class="content-search-text">${this.searchText}</span>`

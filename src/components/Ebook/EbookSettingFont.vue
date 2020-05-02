@@ -53,7 +53,7 @@ export default {
       // 调用mixins中的setDefaultFontSize方法改变vuex中的defaultFontSize值
       this.setDefaultFontSize(fontSize)
       saveFontSize(this.fileName, fontSize)
-      // 更改字号的大小
+      // 更改电子书字体的大小
       this.currentBook.rendition.themes.fontSize(fontSize)
     },
     showFontFamilyPopup() {

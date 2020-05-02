@@ -1,3 +1,5 @@
+$animationTime: .3s;
+$animationType: linear;
 $ratio: 375 / 10;
 @function px2rem($px) {
   @return $px / $ratio + rem;
@@ -11,6 +13,11 @@ $ratio: 375 / 10;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+@mixin top() {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 @mixin right() {
   display: flex;
@@ -30,4 +37,50 @@ $ratio: 375 / 10;
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: keep-all;
+}
+@mixin scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+@mixin columnLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+@mixin leftBottom {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+@mixin columnTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+@mixin columnCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@mixin absCenter {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+.icon, .title {
+  color: #666;
+  font-size: px2rem(16);
+}
+.title {
+  font-weight: bold;
 }

@@ -1,10 +1,14 @@
 <template>
   <div class="ebook-read">
     <div id="read"></div>
-    <div class="ebook-read-mask"
-    @click="onMaskClick"
-    @touchmove="move"
-    @touchend="moveEnd"
+    <div
+      class="ebook-read-mask"
+      @click="onMaskClick"
+      @touchmove="move"
+      @touchend="moveEnd"
+      @mousedown.left="mouseEnter"
+      @mousemove.left="mouseMove"
+      @mouseup.left="onMouseEnd"
     ></div>
   </div>
 </template>
@@ -21,11 +25,51 @@ import {
   getLocation
 } from '../../utils/localStorage'
 import { flatten } from '../../utils/book'
+import { getLocalForage } from '../../utils/localForage'
 global.epub = Epub
 export default {
   // 用mixins对重复的代码进行集成  如mapGetters mapActions
   mixins: [ebookMixin],
   methods: {
+    // 1 - 鼠标点击
+    // 2 - 鼠标进入后的移动
+    // 3 - 鼠标松开
+    // 4 - 鼠标还原
+    mouseEnter(e) {
+      this.mouseState = 1
+      this.mouseStartTime = e.timeStamp
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    mouseMove(e) {
+      if (this.mouseState === 1) {
+        this.mouseState = 2
+      } else if (this.mouseState === 2) {
+        let offsetY = 0
+        if (this.firstOffsetY) {
+          offsetY = e.clientY - this.firstOffsetY
+          this.setOffsetY(offsetY)
+        } else {
+          this.firstOffsetY = e.clientY
+        }
+        // 阻止默认行为，解决微信端页面和书签一起下拉的问题
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    },
+    onMouseEnd(e) {
+      if (this.mouseState === 2) {
+        this.setOffsetY(0)
+        this.firstOffsetY = null
+        this.mouseState = 3
+      } else {
+        this.mouseState = 4
+      }
+      const time = e.timeStamp - this.mouseStartTime
+      if (time < 100) {
+        this.mouseState = 4
+      }
+    },
     prevPage() {
       if (this.rendition) {
         this.rendition.prev().then(() => {
@@ -107,16 +151,16 @@ export default {
       this.rendition.hooks.content.register(contents => {
         Promise.all([
           contents.addStylesheet(
-            `${process.env.VUE_APP_RESOURCE_URL}/fonts/daysOne.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
           ),
           contents.addStylesheet(
-            `${process.env.VUE_APP_RESOURCE_URL}/fonts/cabin.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/cabin.css`
           ),
           contents.addStylesheet(
-            `${process.env.VUE_APP_RESOURCE_URL}/fonts/montserrat.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/montserrat.css`
           ),
           contents.addStylesheet(
-            `${process.env.VUE_APP_RESOURCE_URL}/fonts/tangerine.css`
+            `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
           )
         ]).then(() => {})
       })
@@ -140,6 +184,7 @@ export default {
       } else {
         this.firstOffsetY = e.changedTouches[0].clientY
       }
+      // 阻止默认行为，解决微信端页面和书签一起下拉的问题
       e.preventDefault()
       e.stopPropagation()
     },
@@ -197,10 +242,7 @@ export default {
       })
     },
     // 初始化电子书
-    initEpub() {
-      // 电子书的静态资源地址
-      const url =
-        process.env.VUE_APP_RESOURCE_URL + '/epub/' + this.fileName + '.epub'
+    initEpub(url) {
       // 创建一个book实例化对象 解析电子书
       this.book = new Epub(url)
       // 调用mixins中的setCurrentBook方法将book对象保存到vuex中
@@ -219,16 +261,31 @@ export default {
         .then(locations => {
           // bookAvailadble设置为true 进度条可以拖动了
           this.setBookAvailable(true)
+          // 刷新 重新定位
           this.refreshLocation()
         })
     }
   },
   mounted() {
-    this.setFileName(this.$route.params.filename.split('|').join('/')).then(
-      () => {
-        this.initEpub()
+    console.log(this.$route.params.fileName)
+    const books = this.$route.params.fileName.split('|')
+    const fileName = books[1]
+    getLocalForage(fileName, (err, blob) => {
+      if (!err && blob) {
+        console.log('找到离线的电子书了!')
+        // 保存文件名到本地
+        this.setFileName(books.join('/')).then(() => {
+          this.initEpub(blob)
+        })
+      } else {
+        console.log('在线获取电子书!')
+        this.setFileName(books.join('/')).then(() => {
+          // 电子书的静态资源地址
+          const url = process.env.VUE_APP_EPUB_URL + '/' + this.fileName + '.epub'
+          this.initEpub(url)
+        })
       }
-    )
+    })
   }
 }
 </script>

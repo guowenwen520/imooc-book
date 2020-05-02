@@ -1,8 +1,8 @@
-// web-storage-cache可以将存入到localStorage中的数据自动转换成json字符串格式
+// web-storage-cache可以将存入到localStorage中的数据自动转换成json字符串格式,同时从localStorage获得的数据自动转换为对象形式
 import Storage from 'web-storage-cache'
 
 const localStorage = new Storage()
-// 自己改造的4中操作localStorage的方法
+// 自己封装的4中操作localStorage的方法
 export function setLocalStorage(key, value) {
   return localStorage.set(key, value)
 }
@@ -100,4 +100,12 @@ export function getBookMark(fileName) {
 // 保存书签
 export function saveBookMark(fileName, bookmark) {
   return setBookObject(fileName, 'bookmark', bookmark)
+}
+// 获取书架电子书列表
+export function getBookShelf(shelf) {
+  return getLocalStorage('shelf')
+}
+// 保存书架电子书列表
+export function saveBookShelf(shelf) {
+  return setLocalStorage('shelf', shelf)
 }

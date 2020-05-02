@@ -46,6 +46,30 @@ const actions = {
   },
   setIsBookMark: ({ commit }, isBookMark) => {
     return commit('set_isBookMark', isBookMark)
+  },
+  setHotSearchOffsetY: ({ commit }, hotSearchOffsetY) => {
+    return commit('set_hotSearchOffsetY', hotSearchOffsetY)
+  },
+  setFlapCardVisible: ({ commit }, flapCardVisible) => {
+    return commit('set_flapCardVisible', flapCardVisible)
+  },
+  setIsEditMode: ({ commit }, isEditMode) => {
+    return commit('set_isEditMode', isEditMode)
+  },
+  setShelfSelected: ({ commit }, shelfSelected) => {
+    return commit('set_shelfSelected', shelfSelected)
+  },
+  setShelfTitleVisible: ({ commit }, shelfTitleVisible) => {
+    return commit('set_shelfTitleVisible', shelfTitleVisible)
+  },
+  setShelfList: ({ commit }, shelfList) => {
+    return commit('set_shelfList', shelfList)
+  },
+  setShelfCategory: ({ commit }, shelfCategory) => {
+    return commit('set_shelfCategory', shelfCategory)
+  },
+  setCurrentType: ({ commit }, currentType) => {
+    return commit('set_currentType', currentType)
   }
 }
 export default actions
