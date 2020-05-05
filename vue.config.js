@@ -9,7 +9,7 @@ const listData = require('./src/mock/bookList')
 const flatListData = require('./src/mock/bookFlatList')
 module.exports = {
   // 打包的相关配置
-  publicPath: process.env.NODE_ENV === 'production' ? '/' : './',
+  publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
   indexPath: 'index.html',

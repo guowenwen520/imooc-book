@@ -179,9 +179,12 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
   ### 前端项目构建和打包
   ```
     进入到项目对应的目录:
-    cd imooc-book/
-    cnpm install
-    cnpm run build
+      cd imooc-book/
+      cnpm install
+      cnpm run build
+    将打包好的项目目录复制到nginx服务器下面的upload文件夹
+      mv dist/ ~/nginx/upload/book
+      cd ~/nginx/upload/
     
 
 
