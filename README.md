@@ -146,7 +146,13 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
   ```
   ### git部署 + 免密更新
   ```
-    
+    cd 
+    pwd 回到root根目录
+    检查是否已将安装了git: git
+    yum install -y git
+    git: 检查是否已将成功安装了git
+    mkdir imooc-ebook 在本地创建一个imooc-ebook的目录
+
 
 
 
