@@ -152,6 +152,38 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
     yum install -y git
     git: 检查是否已将成功安装了git
     mkdir imooc-ebook 在本地创建一个imooc-ebook的目录
+    git clone https://github.com/guowenwen520/imooc-book.git
+    git version 查看git版本 发现版本太旧
+    下载最新版本的git:
+      先移除旧版本的git yum remove git
+    安装依赖:
+      yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel
+      yum install  gcc perl-ExtUtils-MakeMaker
+    在github上下载最新的git源码:
+      wget https://github.com/git/git/archive/v2.26.2.tar.gz
+    解压:
+      tar -zxvf v2.26.2.tar.gz
+      cd git-2.26.2/
+    编译和安装:
+      make prefix=/usr/local/git all
+      make prefix=/usr/local/git install
+      ll /usr/local/git/bin/
+      cd /usr/bin/
+    创建一个软连接:
+      ln -s /usr/local/git/bin/git git
+      git version 查看版本 到此git部署成功
+    创建一个ssh公钥，实现免密更新:
+      ssh-keygen -t rsa -C "2088756640@qq.com"
+      cat ~/.ssh/id_rsa.pub
+  ```
+  ### 前端项目构建和打包
+  ```
+    进入到项目对应的目录:
+    cd imooc-book/
+    cnpm install
+    cnpm run build
+    
+
 
 
 
