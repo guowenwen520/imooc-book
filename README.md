@@ -184,7 +184,7 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
       cnpm run build
     将打包好的项目目录复制到nginx服务器下面的upload文件夹
       mv dist/ ~/nginx/upload/book
-      cd ~/nginx/upload/ 查看是否上传成功
+      cd ~/nginx/upload/ 查看是否移动成功
     进入后端api对应的目录:
       cd imooc-book/node-imooc-book
       cnpm install
@@ -238,6 +238,51 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
           use book;
           show tables;
           select count(*) from book;
+  ```
+  ### 一键部署脚本开发
+  ```
+    到服务器的root目录:
+      cd
+      pwd
+    创建一个update.sh文件:
+      touch update.sh
+    添加可执行属性:
+      chmod +x update.sh
+    查看启动中的node服务:
+      ps -ef|grep node
+    先停止已经在运行中的node服务:
+      查看启动中的node服务的进程号:
+        ps -ef|grep node|grep app.js|awk '{print $2}'
+    vim update.sh 打开update.sh文件,将下列内容拷贝到update.sh文件中；
+      echo "start updating frontend..."
+      cd /root/imooc-ebook/imooc-book
+      echo "updating source"
+      git pull
+      echo "building"
+      cnpm run build
+      echo "frontend publish"
+      rm -rf ~/nginx/upload/book
+      mv dist ~/nginx/upload/book
+      echo "finish updating frontend..."
+      echo "start updating backend..."
+      cd /root/imooc-ebook/node-imooc-book
+      echo "updating source"
+      git pull
+      echo "stopping service..."
+      kill -9 `ps -ef|grep node|grep app.js|awk '{print $2}'`
+      echo "restarting service..."
+      node app.js &
+      echo "finish updating backend..."
+    退出并保存update.sh文件:
+      Ctrl + C
+      :wq
+    检查是否启动成功:
+      ps -ef|grep node
+    运行一键部署脚本:
+      ./update.sh
+
+    
+
 
 
 
