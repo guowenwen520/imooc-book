@@ -184,8 +184,62 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
       cnpm run build
     将打包好的项目目录复制到nginx服务器下面的upload文件夹
       mv dist/ ~/nginx/upload/book
-      cd ~/nginx/upload/
-    
+      cd ~/nginx/upload/ 查看是否上传成功
+    进入后端api对应的目录:
+      cd imooc-book/node-imooc-book
+      cnpm install
+      后端服务启动 但是只能在局域网内才能访问到 如果外网想访问，需要在阿里云服务器开放3000端口.
+      node app.js & &可以让服务一直在后台启动
+      ps -ef|grep node 查看node服务
+  ```
+  ### 安装mysql
+  ```
+    1.下载并安装MySQL官方的 Yum Repository:
+      wget -i -c http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm
+    使用上面的命令就直接下载了安装用的Yum Repository，大概25KB的样子，然后就可以直接yum安装了:
+      yum -y install mysql57-community-release-el7-10.noarch.rpm
+    之后就开始安装MySQL服务器:
+      yum -y install mysql-community-server
+    2.MySQL数据库设置 
+      首先启动MySQL:
+        systemctl start  mysqld.service
+      查看MySQL运行状态：
+        systemctl status mysqld.service
+      此时MySQL已经开始正常运行，不过要想进入MySQL还得先找出此时root用户的密码，通过如下命令可以在日志文件中找出密码：
+      如下命令进入数据库:
+        mysql -uroot -p
+      输入初始密码，此时不能做任何事情，因为MySQL默认必须修改密码之后才能操作数据库：
+        ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
+      这里有个问题，新密码设置的时候如果设置的过于简单会报错：
+        set global validate_password_policy=0;
+        set global validate_password_length=1;
+      再重新设置密码就可以成功了:
+        ALTER USER 'root'@'localhost' IDENTIFIED BY '123456';
+      显示已有的数据库:
+        show Databases;
+      退出数据库:
+        quit;
+      使用更新后的密码重新登:
+        mysql -uroot -p 然后输入更新后的密码即可
+      3.使用sqlyog连接阿里云服务器上面的MySQL
+          mysql -uroot -p 然后输入更新后的密码
+          use mysql;
+          使用mysql_native_password进行远程认证，凡是远程连接这里的localhost一定要换成%
+          create user 'root'@'%' identified with mysql_native_password by '123456';
+        刷新权限:
+          flush privileges;
+        连接上后发现只有一个数据库，这是因为权限不够:
+          grant all privileges on *.* to 'root'@'%';
+        刷新权限:
+          flush privileges;
+        然后导入事先准备好的sql脚本,创建book数据库，查询，添加数据：
+          在服务端:
+          show databases;
+          use book;
+          show tables;
+          select count(*) from book;
+
+
 
 
 
